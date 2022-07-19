@@ -63,7 +63,15 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesViewHolder> {
         holder.notes_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                listener.onClick(list.get(holder.getAdapterPosition()));
+            }
+        });
+
+        holder.notes_container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onLongClick(list.get(holder.getAdapterPosition()), holder.notes_container);
+                return true;
             }
         });
     }
