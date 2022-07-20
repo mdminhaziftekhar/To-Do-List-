@@ -2,6 +2,7 @@ package com.example.todolistapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     List<Notes> notes = new ArrayList<>();
     RoomDB database;
     FloatingActionButton fab_add;
+    SearchView searchView_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_home);
         fab_add = findViewById(R.id.fab_add);
+        searchView_home = findViewById(R.id.searchView_home);
 
         database = RoomDB.getInstance(this);
         notes = database.mainDAO().getAll();
@@ -48,7 +52,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 101); //101 because we are adding data, for editing we'll pass 102
             }
         });
+
+        searchView_home.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return true;
+            }
+        });
         
+    }
+
+    private void filter(String newText) {
+        List<Notes> filteredList = new ArrayList<>();
+        for(Notes singleNote : notes){
+            if(singleNote.getTitle().toLowerCase().contains(newText.toLowerCase())
+            || singleNote.getNotes().toLowerCase().contains(newText.toLowerCase())){
+                filteredList.add(singleNote);
+            }
+        }
+        notesListAdapter.filterList(filteredList);
     }
 
     @Override

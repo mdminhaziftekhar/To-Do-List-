@@ -95,6 +95,11 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesViewHolder> {
     public int getItemCount() {
         return list.size();
     }
+
+    public void filterList(List<Notes> filteredList){
+        list = filteredList;
+        notifyDataSetChanged();
+    }
 }
 class NotesViewHolder extends RecyclerView.ViewHolder {
 
