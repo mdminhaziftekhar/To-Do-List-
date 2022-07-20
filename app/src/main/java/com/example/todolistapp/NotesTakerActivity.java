@@ -19,6 +19,7 @@ public class NotesTakerActivity extends AppCompatActivity {
     EditText editText_title, editText_notes;
     ImageView imageView_save;
     Notes notes;
+    boolean isOldNote = false; //for checking if it's coming for update or insert tasks
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,18 @@ public class NotesTakerActivity extends AppCompatActivity {
         imageView_save = findViewById(R.id.imageView_save);
         editText_title = findViewById(R.id.editText_title);
         editText_notes = findViewById(R.id.editText_notes);
+
+        notes = new Notes();
+        try{
+            notes = (Notes) getIntent().getSerializableExtra("old_note"); //for updating or editing
+            editText_title.setText(notes.getTitle());
+            editText_notes.setText(notes.getNotes());
+            isOldNote = true;
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         imageView_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +55,9 @@ public class NotesTakerActivity extends AppCompatActivity {
                 SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm a");
                 Date date = new Date();
 
-                notes = new Notes(); //initializing notes
+                if(!isOldNote){
+                    notes = new Notes(); //initializing notes for new notes
+                }
 
                 notes.setTitle(title);
                 notes.setNotes(description);
