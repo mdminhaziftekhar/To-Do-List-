@@ -88,7 +88,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesViewHolder> {
 
         Random random = new Random();
         int random_color = random.nextInt(colorCode.size());
-        return random_color;
+        return colorCode.get(random_color);
     }
 
     @Override
