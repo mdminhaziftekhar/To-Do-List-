@@ -1,11 +1,13 @@
 package com.example.todolistapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -47,6 +49,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 101){
+            if (resultCode == Activity.RESULT_OK){
+                Notes new_notes = (Notes) data.getSerializableExtra("note"); //getting back data from NotesTakerActivity
+                database.mainDAO().insert(new_notes);
+                notes.clear();
+                notes.addAll(database.mainDAO().getAll());
+                notesListAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void updateRecycler(List<Notes> notes) {
