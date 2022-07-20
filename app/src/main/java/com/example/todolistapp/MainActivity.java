@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.todolistapp.Adapters.NotesListAdapter;
 import com.example.todolistapp.Database.RoomDB;
@@ -36,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
         notes = database.mainDAO().getAll();
         
         updateRecycler(notes);
+
+        fab_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NotesTakerActivity.class);
+                startActivityForResult(intent, 101); //101 because we are adding data, for editing we'll pass 102
+            }
+        });
         
     }
 
